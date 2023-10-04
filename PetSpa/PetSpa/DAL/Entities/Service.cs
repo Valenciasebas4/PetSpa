@@ -13,6 +13,11 @@ namespace PetSpa.DAL.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         public string Name { get; set; }
 
+        [Display(Name = "Descripción")]
+        [MaxLength(200)]
+        [Required(ErrorMessage = "El campo {0} es obligatorio")]
+        public string Description { get; set; }
+
         [Column(TypeName = "decimal(18,2)")]
         [DisplayFormat(DataFormatString = "{0:C2}")]
         [Display(Name = "Precio")]
