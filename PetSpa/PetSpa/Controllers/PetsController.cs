@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PetSpa.DAL;
 using PetSpa.DAL.Entities;
 using PetSpa.Helpers;
+using PetSpa.Models;
 
 namespace PetSpa.Controllers
 {
@@ -78,27 +80,85 @@ namespace PetSpa.Controllers
             return View(pet);
         }
 
-        // GET: Pets/Create
-        public IActionResult Create()
+        [Authorize]
+        public async Task<IActionResult> Create()
         {
-            return View();
+            ViewBag.UserFullName = GetUserFullName();
+            AddPetViewModel addPetleViewModel = new()
+            {
+                Services = await _dropDownListHelper.GetDDLServicesAsync(),
+            };
+
+            return View(addPetleViewModel);
         }
+
 
         // POST: Pets/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,PetDetailsId,Id,CreatedDate,ModifiedDate")] Pet pet)
+        public async Task<IActionResult> Create(AddPetViewModel addPetViewModel)
         {
-            if (ModelState.IsValid)
-            {
-                pet.Id = Guid.NewGuid();
-                _context.Add(pet);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(pet);
+           // if (ModelState.IsValid)
+           // {
+                User user = await _userHelper.GetUserAsync(User.Identity.Name);
+
+                // Calcular la fecha mínima permitida para el nuevo registro
+                DateTime maxDate = DateTime.Now.Date.AddDays(-2);
+
+                // Verificar si ya existe una mascota con el mismo nombre y fecha actual
+                bool petExists = await _context.Pets
+                    .AnyAsync(v => v.Name == addPetViewModel.Name &&
+                                   v.CreatedDate > maxDate);
+
+                // Esta linea verifica si ya existe una mascota con el mismo nombre y si la fecha actual supera los 2 dias tambien verifica si pertenece al mismo cliente ya que otro cliente puede tener una mascota con el mismo nombre
+                bool Exists = await _context.Pets
+                    .AnyAsync(v => v.Name == addPetViewModel.Name &&
+                                   v.CreatedDate > maxDate && v.Owner.Id == user.Id);
+
+
+
+            if (Exists)
+                {
+                    ModelState.AddModelError(string.Empty, "Ya se ha registrado una mascota con el mismo nombre en los últimos 2 días.");
+                }
+                else
+                {
+                    try
+                    {
+                        Pet pet = new()
+                        {
+                            CreatedDate = DateTime.Now,
+                            Service = await _context.Services.FindAsync(addPetViewModel.ServiceId),
+                            Owner = user,
+                            Name = addPetViewModel.Name,
+                        };
+
+                        PetDetails petDetails = new()
+                        {
+                            CreatedDate = DateTime.Now,
+                            Pet = pet,
+
+                        };
+
+
+
+
+                        _context.Add(pet);
+                        _context.Add(petDetails);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                    catch (Exception exception)
+                    {
+                        ModelState.AddModelError(string.Empty, exception.Message);
+                    }
+                }
+           // }
+            addPetViewModel.Services = await _dropDownListHelper.GetDDLServicesAsync();
+            return View(addPetViewModel);
         }
 
         // GET: Pets/Edit/5
@@ -122,7 +182,7 @@ namespace PetSpa.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,PetDetailsId,Id,CreatedDate,ModifiedDate")] Pet pet)
+        public async Task<IActionResult> Edit(Guid id, Pet pet)
         {
             if (id != pet.Id)
             {
