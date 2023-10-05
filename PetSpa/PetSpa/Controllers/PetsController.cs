@@ -95,15 +95,13 @@ namespace PetSpa.Controllers
         }
 
 
-        // POST: Pets/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(AddPetViewModel addPetViewModel)
         {
-           // if (ModelState.IsValid)
-           // {
+            if (ModelState.IsValid)
+            {
                 User user = await _userHelper.GetUserAsync(User.Identity.Name);
 
                 // Calcular la fecha mínima permitida para el nuevo registro
@@ -121,9 +119,11 @@ namespace PetSpa.Controllers
 
 
 
-            if (Exists)
+                if (Exists)
                 {
                     ModelState.AddModelError(string.Empty, "Ya se ha registrado una mascota con el mismo nombre en los últimos 2 días.");
+                    TempData["mascotaNoIngresada"] = "No Se ingreso correctamente";
+                    return View(addPetViewModel);
                 }
                 else
                 {
@@ -144,7 +144,7 @@ namespace PetSpa.Controllers
 
                         };
 
-
+                        TempData["mascotaIngresada"] = "Se ingreso correctamente";
 
                         _context.Add(pet);
                         _context.Add(petDetails);
@@ -157,7 +157,15 @@ namespace PetSpa.Controllers
                         ModelState.AddModelError(string.Empty, exception.Message);
                     }
                 }
-           // }
+            }
+            else
+            {
+                var errors = ModelState.Select(x => x.Value.Errors)
+               .Where(y => y.Count > 0)
+               .ToList();
+                addPetViewModel.Services = await _dropDownListHelper.GetDDLServicesAsync();
+                return View(addPetViewModel);
+            }
             addPetViewModel.Services = await _dropDownListHelper.GetDDLServicesAsync();
             return View(addPetViewModel);
         }

@@ -5,7 +5,15 @@
 }
 
 <h1 class="text-center">Mascotas Ingresadas</h1>
-
+                @if (TempData["mascotaIngresada"] != null)
+                {
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                       @TempData["mascotaIngresada"]
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    
+                }
+                
 
 <table class="table">
     <thead>

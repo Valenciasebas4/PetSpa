@@ -3,7 +3,14 @@
 @{
     ViewData["Title"] = "Create";
 }
-
+            @if (TempData["mascotaNoIngresada"] != null)
+                {
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        @TempData["mascotaNoIngresada"]
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    
+                }
 
 <div class="container">
     <main role="main" class="pb-3 p-3">
@@ -11,6 +18,7 @@
         <hr />
         <div class="row">
             <div class="col-md-4">
+                
                 <form asp-action="Create" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Services" />
