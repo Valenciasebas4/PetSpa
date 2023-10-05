@@ -1,0 +1,68 @@
+﻿@model PetSpa.Models.UserProfileViewModel
+
+@{
+    ViewData["Title"] = "UserProfile";
+}
+
+
+
+<div class="container text-center">
+    <main role="main" class="pb-3 p-3 ">
+        <div class="text-center rounded-pill div-title">
+            <h2>Mi perfil</h2>
+        </div>
+        <hr />
+        @if (Model != null)
+        {
+            <div class="row">
+                <div class="col-md-4">
+                    <a asp-action="MyServices" asp-controller="PetsDetails" class="btn btn-dark mt-4">Ver historial de servicios</a>
+                </div>
+                <div class="col-md-8">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.FirstName)
+                        </dt>
+                        <dd class="col-sm-8">
+                            <spam class="form-control">@Html.DisplayFor(model => model.FirstName)</spam>
+
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.LastName)
+                        </dt>
+                        <dd class="col-sm-8">
+                            <spam class="form-control">@Html.DisplayFor(model => model.LastName)</spam>
+
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Address)
+                        </dt>
+                        <dd class="col-sm-8">
+                            <spam class="form-control">@Html.DisplayFor(model => model.Address)</spam>
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.PhoneNumber)
+                        </dt>
+                        <dd class="col-sm-8">
+                            <spam class="form-control"> @Html.DisplayFor(model => model.PhoneNumber)</spam>
+                        </dd>
+
+                        <div class="form-group mt-2">
+                            <a asp-action="EditUser" asp-controller="Account" class="btn btn-primary">Editar Usuario</a>
+
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <p>User profile not found.</p>
+        }
+
+
+    </main>
+</div>

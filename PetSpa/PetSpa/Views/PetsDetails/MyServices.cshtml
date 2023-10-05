@@ -1,0 +1,54 @@
+﻿@model IEnumerable<PetSpa.DAL.Entities.PetDetails>
+
+@{
+    ViewData["Title"] = "MyServices";
+}
+
+<h1>Historial de Servicios</h1>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Pet.Owner.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pet.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pet.Service.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pet.CreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryDate)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            if (item.Pet.Owner.Id == ViewBag.UserId) // Replace "UserId" with the appropriate property name
+            {
+                <tr>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.Pet.Owner.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pet.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pet.Service.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pet.CreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeliveryDate)
+                    </td>               
+            </tr>
+            }
+        }
+    </tbody>
+</table>

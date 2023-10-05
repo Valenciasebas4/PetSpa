@@ -7,10 +7,10 @@
 
 <div class="container">
     <main role="main" class="pb-3 p-3">
-        <h1 class="text-center rounded-pill div-title">Ingresar Vehiculo</h1>
+        <h1 class="text-center rounded-pill div-title">Ingresar Mascota</h1>
         <hr />
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-4">
                 <form asp-action="Create" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Services" />
@@ -29,7 +29,8 @@
 
                     <div class="form-group mt-2">
                         <input type="submit" value="Crear" class="btn btn-outline-primary" />
-                        <a asp-action="Index" class="btn btn-outline-success">Regresar</a>
+                        
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class=" btn btn-outline-success">Regresar</a>
                     </div>
                 </form>
             </div>

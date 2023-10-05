@@ -10,6 +10,7 @@ namespace PetSpa.Helpers
         Task<User> GetUserAsync(string email); //captura los usuarios de la base de datos
 
         Task<IdentityResult> AddUserAsync(User user, string password); //Adiciona usuarios a la base de datos
+        Task<User> AddUserAsync(AddUserViewModel addUserViewModel);
         Task AddRoleAsync(string roleName); //Yo tengo los Roles: Admin y User, estos dos roles los va a agregar en la tabla AspNetRoles
 
         Task AddUserToRoleAsync(User user, string roleName); //Relaciona la tabla User with Roles, agrega un usuario nuevo y le asigna uno de los roles
@@ -17,5 +18,11 @@ namespace PetSpa.Helpers
         Task<bool> IsUserInRoleAsync(User user, string roleName); //Valida si un usuario pertenece a un Rol
         Task<SignInResult> LoginAsync(LoginViewModel loginViewModel);
         Task LogoutAsync();
+
+        Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword);
+
+        Task<IdentityResult> UpdateUserAsync(User user);
+
+        Task<User> GetUserAsync(Guid userId); //Sobrecargado
     }
 }

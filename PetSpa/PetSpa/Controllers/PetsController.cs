@@ -62,6 +62,8 @@ namespace PetSpa.Controllers
 
         }
 
+
+
         // GET: Pets/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
@@ -141,7 +143,6 @@ namespace PetSpa.Controllers
                             Pet = pet,
 
                         };
-
 
 
 

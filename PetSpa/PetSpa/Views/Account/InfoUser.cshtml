@@ -1,0 +1,40 @@
+﻿@model PetSpa.Models.EditUserViewModel
+
+@{
+    ViewData["Title"] = "EditUser";
+}
+
+
+<div class="container">
+    <main role="main" class="pb-3 p-3">
+        <h1 class="text-center rounded-pill div-title">Editar usuario</h1>
+        <hr />
+        <div class="row">
+            <div class="col-md-8">
+                <form asp-action="EditUser" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+
+                    
+
+                    <partial name="../Shared/PartialViews/_User" />
+
+                    <div class="form-group mt-2">
+                        <input type="submit" value="Guardar" class="btn btn-outline-primary" />
+                        <a asp-action="ChangePassword" class="btn btn-outline-secondary">Cambiar Contraseña</a>
+                        <a asp-action="Index" asp-controller="Home" class="btn btn-outline-success">Regresar</a>
+                    </div>
+                </form>
+            </div>
+           
+        </div>
+    </main>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
